@@ -28,6 +28,12 @@ public class SecurityConfiguration {
                                 http
                                         .anyRequest().permitAll()
                 )
+                .oauth2ResourceServer(
+                        oauth2 ->
+                                oauth2.jwt(
+                                        j -> j.jwtAuthenticationConverter(new KeycloakConverter())
+                                )
+                )
                 .sessionManagement(
                         session ->
                                 session.maximumSessions(1)
