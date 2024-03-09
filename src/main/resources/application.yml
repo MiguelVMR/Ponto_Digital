@@ -27,13 +27,13 @@ custom:
     url: http://localhost:8081/
     admin:
       client: admin-cli
-      secret: yG3jPSCS6LAkaa2nuFufTyBYA5WHhws3
+      secret: MthhgPY18p9xGg3uxyBTM2t5AULCSj7W
       username: admin
       password: admin
       realm: master
     user:
-      client: point
-      secret: dnpf2BjicmQQ9H927kcLxm5TIg3S56YJ
+      client: desenvolvimento
+      secret: vQHuCt85w7rMQc4boaQVnMe2EnlfERxE
       realm: ponto
   auth:
     key: 5gc%CjDCUb

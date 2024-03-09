@@ -43,7 +43,7 @@ public class AuthController {
                     @Content(schema = @Schema(implementation = PontoExceptionController.ErrorHandling.class)) }),
     })
     @Operation(summary = "Endpoint responsável por realizar a criação de usuario")
-    @PostMapping()
+    @PostMapping("create-user")
     public ResponseEntity<String> save(
             @RequestBody @Valid final Usuario usuario) {
 

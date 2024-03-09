@@ -7,24 +7,32 @@ import org.springframework.stereotype.Component;
 import org.keycloak.representations.AccessTokenResponse;
 import com.ponto.ponto_digital.exception.PontoException;
 import com.ponto.ponto_digital.gateway.KeycloakGateway;
+import com.ponto.ponto_digital.gateway.UsuarioGateway;
 import com.ponto.ponto_digital.model.dto.Usuario;
 import com.ponto.ponto_digital.model.record.LoginRecord;
 import com.ponto.ponto_digital.utils.Mapper;
+import com.ponto.ponto_digital.utils.Validators;
 
 import jakarta.ws.rs.core.Response;
 
 @Component
 public class AutenticacaoBusiness {
     private final Mapper mapper = new Mapper();
+    private final Validators validators = new Validators();
 
+    private final UsuarioGateway usuarioGateway;
     private final KeycloakGateway keycloakGateway;
 
     @Autowired
-    public AutenticacaoBusiness(KeycloakGateway keycloakGateway) {
+    public AutenticacaoBusiness(KeycloakGateway keycloakGateway,UsuarioGateway usuarioGateway) {
         this.keycloakGateway = keycloakGateway;
+        this.usuarioGateway = usuarioGateway;
     }
 
     public void criarUsuario(Usuario usuario) {
+        
+        validators.validacaoCpf(usuario.getCpf());
+        
         UserRepresentation userRepresentation = mapper.converter(usuario, true);
 
         Response response = keycloakGateway.getUsersResource().create(userRepresentation);
@@ -37,6 +45,9 @@ public class AutenticacaoBusiness {
         Integer index = location.lastIndexOf("users/");
 
         usuario.setKeyCloakUserId(location.substring(index + "users/".length()));
+
+        
+        usuarioGateway.save(usuario);
     }
 
     public AccessTokenResponse login(LoginRecord loginRecord) {
