@@ -3,9 +3,12 @@ package com.ponto.ponto_digital.business;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import com.ponto.ponto_digital.gateway.UsuarioGateway;
+import com.ponto.ponto_digital.model.dto.MarcarPonto;
 import com.ponto.ponto_digital.model.dto.UsuarioView;
 import com.ponto.ponto_digital.utils.Mapper;
 
@@ -32,5 +35,12 @@ public class UsuarioBusiness {
     public void deleteUser(UUID id){
         usuarioGateway.deleteUsuario(id);
     }
+
+    public Page<MarcarPonto> findallPonto(UUID usuario_id,Pageable pageable){
+        
+        return usuarioGateway.findAllPontos(usuario_id, pageable);
+    }
+
+   
 
 }
