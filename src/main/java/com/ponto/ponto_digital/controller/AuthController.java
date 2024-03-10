@@ -7,11 +7,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.ponto.ponto_digital.business.AutenticacaoBusiness;
 import com.ponto.ponto_digital.exception.PontoExceptionController;
 import com.ponto.ponto_digital.model.dto.Usuario;
 import com.ponto.ponto_digital.model.record.LoginRecord;
+import com.ponto.ponto_digital.model.record.ResetarSenhaExterna;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -52,16 +54,44 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.CREATED).body("Usuario Criado");
     }
 
-      @ApiResponses({
+    @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK"),
-            @ApiResponse(responseCode = "400", description = "Bad Request", content =
-                    {@Content(schema = @Schema(implementation = PontoExceptionController.ErrorHandling.class))}),
+            @ApiResponse(responseCode = "400", description = "Bad Request", content = {
+                    @Content(schema = @Schema(implementation = PontoExceptionController.ErrorHandling.class)) }),
     })
     @Operation(summary = "Endpoint responsável por realizar o login do usuário")
     @PostMapping("login")
     public ResponseEntity<AccessTokenResponse> login(@RequestBody LoginRecord loginRecord) {
 
         AccessTokenResponse response = autenticacaoBusiness.login(loginRecord);
+
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "OK"),
+            @ApiResponse(responseCode = "400", description = "Bad Request", content = {
+                    @Content(schema = @Schema(implementation = PontoExceptionController.ErrorHandling.class)) }),
+    })
+    @Operation(summary = "Endpoint responsável por enviar o token de recuperação de senha")
+    @PostMapping("enviar-token")
+    public ResponseEntity<String> enviaTokenResetSenha(@RequestParam(name = "email") final String email) {
+
+        autenticacaoBusiness.geraTokenResetSenha(email);
+
+        return ResponseEntity.status(HttpStatus.OK).body("Token enviado ao email com sucesso!");
+    }
+
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "OK"),
+            @ApiResponse(responseCode = "400", description = "Bad Request", content = {
+                    @Content(schema = @Schema(implementation = PontoExceptionController.ErrorHandling.class)) }),
+    })
+    @Operation(summary = "Endpoint responsável por realizar a recuperação de senha do usuário")
+    @PostMapping("resetar-senha")
+    public ResponseEntity<AccessTokenResponse> resetPassword(@RequestBody ResetarSenhaExterna resetarSenhaExterna) {
+
+        AccessTokenResponse response = autenticacaoBusiness.recuperarSenhaDeslogado(resetarSenhaExterna);
 
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }

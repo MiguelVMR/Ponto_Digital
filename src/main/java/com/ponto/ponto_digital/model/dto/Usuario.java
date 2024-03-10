@@ -58,6 +58,9 @@ public class Usuario {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private LocalDateTime disabledAt;
 
+    @JsonIgnore
+    private String tokenSenha;
+
     public void setDisabled(Boolean disabled) {
         if (disabled) {
             this.updatedAt = LocalDateTime.now();

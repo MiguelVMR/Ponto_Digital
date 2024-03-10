@@ -49,6 +49,8 @@ public class UsuarioSchema {
 
     private LocalDateTime disabledAt;
 
+    private String tokenSenha;
+
     @OneToMany(mappedBy = "usuario" ,cascade = CascadeType.REMOVE,fetch = FetchType.EAGER)
     private List<MarcarPontoSchema> marcarPontoSchema;
 

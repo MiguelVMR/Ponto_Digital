@@ -64,4 +64,15 @@ public class UsuarioGateway {
         .map(m -> mapper.converter(m, MarcarPonto.class));
     }
 
+    public Usuario findByEmailAndDisabled(String email, boolean disabled) {
+        UsuarioSchema usuarioSchema = usuarioRepository.findByEmailAndDisabled(email, disabled)
+                .orElseThrow(() -> new PontoException("Usuario não encontrado", HttpStatus.NOT_FOUND));
+
+        if (usuarioSchema.getDisabled() == true) {
+            throw new PontoException("Usuario está desabilitado", HttpStatus.UNAUTHORIZED);
+        }
+
+        return mapper.converter(usuarioSchema, Usuario.class);
+    }
+
 }

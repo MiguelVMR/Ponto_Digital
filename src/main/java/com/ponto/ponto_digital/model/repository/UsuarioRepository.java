@@ -19,5 +19,7 @@ public interface UsuarioRepository extends JpaRepository<UsuarioSchema,UUID>{
     @Query("SELECT u.marcarPontoSchema FROM UsuarioSchema u WHERE u.id = :id")
     Page<MarcarPontoSchema> findPontosByUsuarioId(@Param("id") UUID id, @Param("pageable") Pageable pageable);
 
+    Optional<UsuarioSchema> findByEmailAndDisabled(String email, boolean disabled);
+
     
 }
